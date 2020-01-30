@@ -10,11 +10,13 @@ from basketball_reference_scraper.seasons import get_schedule, get_standings
 from datetime import timedelta
 import pandas as pd
 from basketball_reference_scraper.teams import get_roster, get_team_stats, get_opp_stats, get_roster_stats, get_team_misc
+import numpy as np
 
 start_year = 2000
 end_year = 2013
 final_dict = {}
-
+df_columns = ['year', 'team', 'b2b_away_pct', 'b2b_away_wins', 'b2b_away_games', 'season_WL_pct', 'diff']
+flat_final = pd.DataFrame(columns = df_columns)
 
 #year = 2010
 
@@ -77,7 +79,8 @@ for year in range(start_year, end_year, 1):
             
             if (vis_pts > home_pts):
                 num_b2b_away_wins += 1
-        if (num_b2b_away != 0):
+                
+        if (num_b2b_away_ != 0):
             b2b_away_pct = round(num_b2b_away_wins / num_b2b_away, 2)
         else:
             b2b_away_pct = 0 #0 or null?
@@ -90,6 +93,21 @@ for year in range(start_year, end_year, 1):
                   'b2b_away_games' : num_b2b_away,
                   'season_WL_pct' : WL_perc,
                   'diff' : difference}
+
+        temp_dict = final_dict[year][team]   
+        
+        temp_dict['year'] = year
+        temp_dict['team'] = team
+        
+        temp_df = pd.DataFrame(temp_dict, index = [0])
+        
+        cols = temp_df.columns.tolist()
+        
+        cols = cols[-1:] + cols[:-1]
+        cols = cols[-1:] + cols[:-1]
+        
+        temp_df = temp_df[cols]
+        flat_final = pd.concat([temp_df, flat_final])
 
 temp = combined_standings[combined_standings.TEAM.eq('Miami Heat')]
 temp2 = round(float(temp['W/L%']), 2)
