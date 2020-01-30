@@ -11,11 +11,12 @@ from datetime import timedelta
 import pandas as pd
 from basketball_reference_scraper.teams import get_roster, get_team_stats, get_opp_stats, get_roster_stats, get_team_misc
 import numpy as np
+import matplotlib.pyplot as plt
 
 start_year = 2000
 end_year = 2013
-final_dict = {}
 df_columns = ['year', 'team', 'b2b_away_pct', 'b2b_away_wins', 'b2b_away_games', 'season_WL_pct', 'diff']
+final_dict = {}
 flat_final = pd.DataFrame(columns = df_columns)
 
 #year = 2010
@@ -80,14 +81,14 @@ for year in range(start_year, end_year, 1):
             if (vis_pts > home_pts):
                 num_b2b_away_wins += 1
                 
-        if (num_b2b_away_ != 0):
+        if (num_b2b_away != 0):
             b2b_away_pct = round(num_b2b_away_wins / num_b2b_away, 2)
         else:
             b2b_away_pct = 0 #0 or null?
             
         temp = combined_standings[combined_standings.TEAM.eq(team)]
         WL_perc = round(float(temp['W/L%']), 2)
-        difference = round(WL_perc - b2b_away_pct, 2)
+        difference = round(b2b_away_pct - WL_perc, 2)
         final_dict[year][team] = {'b2b_away_pct' : b2b_away_pct,
                   'b2b_away_wins' : num_b2b_away_wins,
                   'b2b_away_games' : num_b2b_away,
@@ -109,10 +110,20 @@ for year in range(start_year, end_year, 1):
         temp_df = temp_df[cols]
         flat_final = pd.concat([temp_df, flat_final])
 
-temp = combined_standings[combined_standings.TEAM.eq('Miami Heat')]
-temp2 = round(float(temp['W/L%']), 2)
-#figure out how to store data
-#you need to loops, for team then for year
+corr = flat_final.iloc[: , 2:-1].corr()
+flat_final.iloc[: , 2:-1].head(5).corr()
 
-#b2b_away.append(pd.DataFrame(heat_b2b_away[heat_b2b_away['DATE'] == date_pp]))
+#normalizing data
+from sklearn import preprocessing
+
+normalized = flat_final.copy()
+
+normalized.iloc[:, 2:-1].values
+
+x = normalized.iloc[:, 2:-1].values #returns a numpy array
+min_max_scaler = preprocessing.MinMaxScaler()
+x_scaled = min_max_scaler.fit_transform(x)
+normalized = pd.DataFrame(x_scaled, columns = df_columns[2:-1])
+corr = normalized.corr()
+#plotting
         
