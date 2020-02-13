@@ -12,8 +12,10 @@ import pandas as pd
 from basketball_reference_scraper.teams import get_roster, get_team_stats, get_opp_stats, get_roster_stats, get_team_misc
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn import preprocessing
 
-start_year = 2000
+
+start_year = 2010
 end_year = 2013
 df_columns = ['year', 'team', 'b2b_away_pct', 'b2b_away_wins', 'b2b_away_games', 'season_WL_pct', 'diff']
 final_dict = {}
@@ -114,7 +116,6 @@ corr = flat_final.iloc[: , 2:-1].corr()
 flat_final.iloc[: , 2:-1].head(5).corr()
 
 #normalizing data
-from sklearn import preprocessing
 
 normalized = flat_final.copy()
 
@@ -125,5 +126,11 @@ min_max_scaler = preprocessing.MinMaxScaler()
 x_scaled = min_max_scaler.fit_transform(x)
 normalized = pd.DataFrame(x_scaled, columns = df_columns[2:-1])
 corr = normalized.corr()
+
+#normalized.plot(x = 'b2b_away_pct', y = 'b2b_away_games', kind = 'scatter')
+
+#plt.scatter(x = normalized['b2b_away_pct'], y = normalized['b2b_away_games'])
+
+plt.scatter(y = flat_final['b2b_away_pct'], x = flat_final['season_WL_pct'], s = flat_final['season_WL_pct'] ** -3.5, alpha = .4)
 #plotting
         
