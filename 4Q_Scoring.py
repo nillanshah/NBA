@@ -48,9 +48,3 @@ cleaned_final_box_score = cleaned_final_box_score[cleaned_final_box_score.MP != 
 cleaned_final_box_score = cleaned_final_box_score.dropna()
 
 cleaned_final_box_score.to_csv("4Q_boxscore.csv", index = False)
-
-temp = cleaned_final_box_score.groupby(['PLAYER'])
-
-for key, item in temp:
-    print((key, item), "\n\n")
-    break
