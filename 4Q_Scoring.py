@@ -53,11 +53,11 @@ cleaned_final_box_score = cleaned_final_box_score[cleaned_final_box_score.MP != 
 
 #cleaned_final_box_score = cleaned_final_box_score.dropna()
 
-replace_values = {'PLAYER' : '', 'MP': '0:00', 'FG' : 0, 'FGA': 0, 'FG%': 0.0,
-                  '3P': 0, '3PA': 0, '3P%': 0.0, 'FT': 0, 'FTA': 0,
-                  'FT%': 0.0, 'ORB':0, 'DRB':0, 'TRB':0, 'AST': 0, 'STL':0, 'BLK':0, 
-                   'TOV':0, 'PF':0, 'PTS':0,
-                   '+/-':0}
+replace_values = {'PLAYER' : '', 'MP': '0:00', 'FG' : 0, 'FGA': 0, 
+                  'FG%': 0.0,'3P': 0, '3PA': 0, '3P%': 0.0, 'FT': 0, 
+                  'FTA': 0, 'FT%': 0.0, 'ORB':0, 'DRB':0, 'TRB':0, 
+                  'AST': 0, 'STL':0, 'BLK':0, 'TOV':0, 'PF':0, 'PTS':0,
+                  '+/-':0}
 
 cleaned_final_box_score = cleaned_final_box_score.fillna(value = replace_values)
 cleaned_final_box_score.to_csv("4Q_boxscore.csv", index = False)
